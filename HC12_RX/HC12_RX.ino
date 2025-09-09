@@ -6,9 +6,11 @@
 #define HC12_RX 3
 #define HC12_SET 4
 
-#define T6586_FI 9
-#define T6586_BI 10
-#define SERVO_MOTOR 5
+#define T65861_FI 5
+#define T65861_BI 6
+#define T65862_FI 9
+#define T65862_BI 10
+#define SERVO_MOTOR 11
 
 SoftwareSerial HC12(HC12_TX, HC12_RX);
 Servo myServo;
@@ -82,16 +84,21 @@ void setup() {
   Serial.begin(9600);
   HC12.begin(9600);
   delay(50);
-  pinMode(T6586_FI, OUTPUT);
-  pinMode(T6586_BI, OUTPUT);
+
+  pinMode(T65861_FI, OUTPUT);
+  pinMode(T65861_BI, OUTPUT);
+  pinMode(T65862_FI, OUTPUT);
+  pinMode(T65862_BI, OUTPUT);
   
   // 서보 초기화
   myServo.attach(SERVO_MOTOR);
   myServo.write(90);  // 중앙 위치로 초기화
   lastServoAngle = 90;
   
-  analogWrite(T6586_FI, 0);
-  analogWrite(T6586_BI, 0);
+    analogWrite(T65861_FI, 0);
+    analogWrite(T65861_BI, 0);
+    analogWrite(T65862_FI, 0);
+    analogWrite(T65862_BI, 0);
   
   Serial.println("Servo Library Control Ready");
 }
@@ -185,8 +192,10 @@ void processData() {
     Serial.println("Front");
     Serial.println(speed);
     Serial.println(mappedValueFront);
-    analogWrite(T6586_FI, 255);
-    analogWrite(T6586_BI, 0);
+    analogWrite(T65861_FI, mappedValueFront);
+    analogWrite(T65861_BI, 0);
+    analogWrite(T65862_FI, mappedValueFront);
+    analogWrite(T65862_BI, 0);
     // delay(100);
   }
   else if(speed <= 123) {
@@ -194,13 +203,17 @@ void processData() {
     Serial.println("Back");
     Serial.println(speed);
     Serial.println(mappedValueBack);
-    analogWrite(T6586_FI, 0);
-    analogWrite(T6586_BI, 255);
+    analogWrite(T65861_FI, 0);
+    analogWrite(T65861_BI, mappedValueFront);
+    analogWrite(T65862_FI, 0);
+    analogWrite(T65862_BI, mappedValueFront);
     // delay(100);
   }
   else {
-    analogWrite(T6586_FI, 0);
-    analogWrite(T6586_BI, 0);
+    analogWrite(T65861_FI, 0);
+    analogWrite(T65861_BI, 0);
+    analogWrite(T65862_FI, 0);
+    analogWrite(T65862_BI, 0);
     // delay(100);
   }
   
@@ -225,7 +238,7 @@ void processData() {
         } else {
             // 중앙 영역이면 90도로 고정
             if(lastServoAngle != 90) {
-                // myServo.write(90);
+                myServo.write(90);
                 lastServoAngle = 90;
                 
             }
