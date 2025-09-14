@@ -104,11 +104,15 @@ void setup() {
 }
 
 void loop1() {
-    analogWrite(T6586_FI, 255);
-    analogWrite(T6586_BI, 0);
+    analogWrite(T65861_FI, 255);
+    analogWrite(T65861_BI, 0);
+    analogWrite(T65862_FI, 255);
+    analogWrite(T65862_BI, 0);
     delay(10000);
-    // analogWrite(T6586_FI, 0);
-    // analogWrite(T6586_BI, 255);
+    analogWrite(T65861_FI, 0);
+    analogWrite(T65861_BI, 255);
+    analogWrite(T65862_FI, 0);
+    analogWrite(T65862_BI, 255);
     // delay(10000);
 }
 void loop() {
@@ -204,9 +208,9 @@ void processData() {
     Serial.println(speed);
     Serial.println(mappedValueBack);
     analogWrite(T65861_FI, 0);
-    analogWrite(T65861_BI, mappedValueFront);
+    analogWrite(T65861_BI, mappedValueBack);
     analogWrite(T65862_FI, 0);
-    analogWrite(T65862_BI, mappedValueFront);
+    analogWrite(T65862_BI, mappedValueBack);
     // delay(100);
   }
   else {
